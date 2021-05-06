@@ -5,6 +5,8 @@ SCRIPTPATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 
 BITWARDEN_RS_FOLDER="vaultwarden"
 CREATE_APP_NAME=" "
+CREATE_HIDE_SUBDIR=""
+HEROKU_DB_SET=" "
 ENABLE_AUTOBUS_BACKUP=0
 ENABLE_DUO=0
 GIT_HASH="main"
@@ -28,6 +30,39 @@ function sed_files {
     sed -i "$1" "$2"
 }
 
+function heroku_db_jawsDB {
+    APP_NAME=$1
+    
+    echo "We will use JawsDB Maria edition, which is free and sufficient for a small instance"
+    heroku addons:create jawsdb -a "$APP_NAME"
+    
+    echo "Checking for additional addons"
+    check_addons
+        
+    echo "Now we use the JAWS DB config as the database URL for Bitwarden"
+    echo "Supressing output due to sensitive nature."
+        
+    heroku config:set DATABASE_URL="$(heroku config:get JAWSDB_URL -a "${APP_NAME}")" -a "${APP_NAME}" > /dev/null
+        
+    echo "And set DB connections to seven in order not to saturate the free DB"
+    heroku config:set DATABASE_MAX_CONNS=7 -a "${APP_NAME}"
+}
+
+function heroku_db_Postgres {
+    APP_NAME=$1
+    
+    echo "We will use Heroku Postgres, which is free and ... "
+    heroku addons:create heroku-postgresql:hobby-dev -a "$APP_NAME"
+    
+    echo "Checking for additional addons"
+    check_addons
+        
+    echo "NPostgres is automatic config var as the database URL for Bitwarden"
+
+    echo "And set DB connections to seven in order not to saturate the free DB"
+    heroku config:set DATABASE_MAX_CONNS=14 -a "${APP_NAME}"
+}
+
 function heroku_bootstrap {
 
     CREATE_APP_NAME=$1
@@ -40,15 +75,12 @@ function heroku_bootstrap {
 
     if [ "${HEROKU_VERIFIED}" -eq "1" ]
     then
-        echo "We will use JawsDB Maria edition, which is free and sufficient for a small instance"
-        heroku addons:create jawsdb -a "$APP_NAME"
-        
-        echo "Checking for additional addons"
-        check_addons
-        
-        echo "Now we use the JAWS DB config as the database URL for Bitwarden"
-        echo "Supressing output due to sensitive nature."
-        heroku config:set DATABASE_URL="$(heroku config:get JAWSDB_URL -a "${APP_NAME}")" -a "${APP_NAME}" > /dev/null
+        if ["&{HEROKU_DB_SET}" -eq "Postgres"]
+        then
+            heroku_db_Postgres "$APP_NAME"
+        else 
+            heroku_db_jawsDB "$APP_NAME"
+        fi
     else
         heroku config:set DATABASE_URL="${OFFSITE_HEROKU_DB}" -a "${APP_NAME}" > /dev/null
     fi
@@ -57,9 +89,7 @@ function heroku_bootstrap {
     echo "Supressing output due to sensitive nature."
     heroku config:set ADMIN_TOKEN="$(openssl rand -base64 48)" -a "${APP_NAME}" > /dev/null
 
-    echo "And set DB connections to seven in order not to saturate the free DB"
-    heroku config:set DATABASE_MAX_CONNS=7 -a "${APP_NAME}"
-    heroku config:set DOMAIN="https://${APP_NAME}.herokuapp.com" -a "${APP_NAME}"
+    heroku config:set DOMAIN="https://${APP_NAME}.herokuapp.com${CREATE_HIDE_SUBDIR}" -a "${APP_NAME}"
 }
 
 function check_addons {
@@ -118,6 +148,8 @@ do
         b) ENABLE_AUTOBUS_BACKUP=${OPTARG};;
         d) ENABLE_DUO=${OPTARG};;
         g) GIT_HASH=${OPTARG};;
+        p) CREATE_HIDE_SUBDIR=${OPTARG};;
+        s) HEROKU_DB_SET=${OPTARG};;
         t) STRATEGY_TYPE=${OPTARG};;
         u) OFFSITE_HEROKU_DB=${OPTARG};;
         v) HEROKU_VERIFIED=${OPTARG};;

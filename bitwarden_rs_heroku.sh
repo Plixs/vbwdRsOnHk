@@ -77,9 +77,9 @@ function heroku_bootstrap {
     then
         if ["&{HEROKU_DB_SET}" -eq "Postgres"]
         then
-            heroku_db_Postgres "$APP_NAME"
+            heroku_db_Postgres $APP_NAME
         else 
-            heroku_db_jawsDB "$APP_NAME"
+            heroku_db_jawsDB $APP_NAME
         fi
     else
         heroku config:set DATABASE_URL="${OFFSITE_HEROKU_DB}" -a "${APP_NAME}" > /dev/null

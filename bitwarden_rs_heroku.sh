@@ -90,6 +90,7 @@ function heroku_bootstrap {
     
     if [ -n "$CREATE_HIDE_SUBDIR" ]
     then
+        CREATE_HIDE_SUBDIR="/${CREATE_HIDE_SUBDIR#*/}"
         CREATE_HIDE_SUBDIR="${CREATE_HIDE_SUBDIR%*/}/"
     fi
 

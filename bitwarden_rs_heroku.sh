@@ -88,6 +88,12 @@ function heroku_bootstrap {
     echo "Additionally set an Admin Token too in the event additional options are needed."
     echo "Supressing output due to sensitive nature."
     heroku config:set ADMIN_TOKEN="$(openssl rand -base64 48)" -a "${APP_NAME}" > /dev/null
+    
+    
+    if [ -n "$CREATE_HIDE_SUBDIR" ]
+    then
+        CREATE_HIDE_SUBDIR="${CREATE_HIDE_SUBDIR%*/}/"
+    fi
 
     heroku config:set DOMAIN="https://${APP_NAME}.herokuapp.com${CREATE_HIDE_SUBDIR}" -a "${APP_NAME}"
 }

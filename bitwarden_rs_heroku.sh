@@ -82,7 +82,7 @@ function heroku_bootstrap {
 
     if [ "${HEROKU_VERIFIED}" -eq "1" ]
     then
-        if ["&{HEROKU_DB_SET}" -eq "Postgres"]
+        if ["${HEROKU_DB_SET}" -eq "Postgres"]
         then
             heroku_db_Postgres $APP_NAME
         else 

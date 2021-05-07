@@ -90,8 +90,9 @@ function heroku_bootstrap {
     
     if [ -n "$CREATE_HIDE_SUBDIR" ]
     then
-        CREATE_HIDE_SUBDIR="/${CREATE_HIDE_SUBDIR#*/}"
-        CREATE_HIDE_SUBDIR="${CREATE_HIDE_SUBDIR%*/}/"
+        echo "we need check the hide subdir path as rule"
+        CREATE_HIDE_SUBDIR="/${CREATE_HIDE_SUBDIR#/}"
+        CREATE_HIDE_SUBDIR="${CREATE_HIDE_SUBDIR%/}/"
     fi
 
     heroku config:set DOMAIN="https://${APP_NAME}.herokuapp.com${CREATE_HIDE_SUBDIR}" -a "${APP_NAME}"

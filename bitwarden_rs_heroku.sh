@@ -6,7 +6,7 @@ SCRIPTPATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 BITWARDEN_RS_FOLDER="vaultwarden"
 CREATE_APP_NAME=" "
 CREATE_HIDE_SUBDIR=""
-HEROKU_DB_SET=" "
+HEROKU_DB_SET=""
 ENABLE_AUTOBUS_BACKUP=0
 ENABLE_DUO=0
 GIT_HASH="main"
@@ -74,7 +74,7 @@ function heroku_bootstrap {
 
     if [ "${HEROKU_VERIFIED}" -eq "1" ]
     then
-        if ["${HEROKU_DB_SET}" -eq "Postgres"]
+        if [ "${HEROKU_DB_SET}" -eq "Postgres" ]
         then
             heroku_db_Postgres $APP_NAME
         else 

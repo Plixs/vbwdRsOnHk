@@ -13,7 +13,7 @@ env:
   OFFSITE_HEROKU_DB: ${{ secrets.OFFSITE_HEROKU_DB }}
   HEROKU_CREATE_OPTIONS: ${{ secrets.HEROKU_CREATE_OPTIONS }}
   CREATE_HIDE_SUBDIR: ${{secrets.CREATE_HIDE_SUBDIR }}
-  HEROKU_DB_SET : ${{secrets.HEROKU_DB_SET }}
+  HEROKU_DB_SET: ${{secrets.HEROKU_DB_SET }}
   
 jobs:
   create_and_deploy_app:

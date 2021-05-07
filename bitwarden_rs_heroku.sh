@@ -64,7 +64,6 @@ function heroku_db_Postgres {
 }
 
 function heroku_bootstrap {
-
     CREATE_APP_NAME=$1
 
     echo "Logging into Heroku Container Registry to push the image (this will add an entry in your Docker config)"
@@ -89,7 +88,6 @@ function heroku_bootstrap {
     echo "Supressing output due to sensitive nature."
     heroku config:set ADMIN_TOKEN="$(openssl rand -base64 48)" -a "${APP_NAME}" > /dev/null
     
-    
     if [ -n "$CREATE_HIDE_SUBDIR" ]
     then
         CREATE_HIDE_SUBDIR="${CREATE_HIDE_SUBDIR%*/}/"
@@ -99,7 +97,6 @@ function heroku_bootstrap {
 }
 
 function check_addons {
-
      if [ "${HEROKU_VERIFIED}" -eq "1" ]
      then
         # Check if Autobus is added

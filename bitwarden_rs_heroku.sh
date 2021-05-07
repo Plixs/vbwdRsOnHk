@@ -49,15 +49,8 @@ function heroku_db_jawsDB {
 }
 
 function heroku_db_Postgres {
-
-    echo "heroku_db_Postgres print ars1 format 1 $1"
-    echo "heroku_db_Postgres print ars1 format 2 $1"
-    
     APP_NAME=$1
-    
-    echo "heroku_db_Postgres print APP_NAME format 1 ${APP_NAME}"
-    echo "heroku_db_Postgres print APP_NAME format 2 $APP_NAME"
-    
+   
     echo "We will use Heroku Postgres, which is free and ... "
     heroku addons:create heroku-postgresql:hobby-dev -a "$APP_NAME"
     
@@ -95,10 +88,7 @@ function heroku_bootstrap {
     echo "Additionally set an Admin Token too in the event additional options are needed."
     echo "Supressing output due to sensitive nature."
     heroku config:set ADMIN_TOKEN="$(openssl rand -base64 48)" -a "${APP_NAME}" > /dev/null
-    
-    echo "CREATE_HIDE_SUBDIR print format 1 ${CREATE_HIDE_SUBDIR}"
-    echo "CREATE_HIDE_SUBDIR print format 2 $CREATE_HIDE_SUBDIR"
-    
+
     heroku config:set DOMAIN="https://${APP_NAME}.herokuapp.com${CREATE_HIDE_SUBDIR}" -a "${APP_NAME}"
 }
 

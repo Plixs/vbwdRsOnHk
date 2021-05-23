@@ -60,7 +60,7 @@ function heroku_db_Postgres {
     echo "NPostgres is automatic config var as the database URL for Bitwarden"
 
     echo "And set DB connections to seven in order not to saturate the free DB"
-    heroku config:set DATABASE_MAX_CONNS=14 -a "${APP_NAME}"
+    heroku config:set DATABASE_MAX_CONNS=16 -a "${APP_NAME}"
 }
 
 function heroku_bootstrap {

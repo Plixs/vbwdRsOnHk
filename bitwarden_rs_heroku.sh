@@ -89,9 +89,6 @@ function heroku_bootstrap {
     echo "Supressing output due to sensitive nature."
     heroku config:set ADMIN_TOKEN="$(openssl rand -base64 48)" -a "${APP_NAME}" > /dev/null
 
-    echo "And set DB connections to seven in order not to saturate the free DB"
-    heroku config:set DATABASE_MAX_CONNS=7 -a "${APP_NAME}"
-
     if [ -n "$CREATE_HIDE_SUBDIR" ]
     then
         echo "we need check the hide subdir path as rule"
